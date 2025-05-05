@@ -1,15 +1,15 @@
 ---
-title: 'Markdown Style Guide'
-description: 'Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.'
+title: 'Principal líder supremo del movimiento'
+description: 'Ivan Sierra, el principal y único gobernante de los Comunistas Informáticos'
 pubDate: 'Jun 19 2024'
-heroImage: '/blog-placeholder-1.jpg'
+heroImage: '/ivan.jpg'
 ---
 
-Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.
+Aquí hay una muestra de la sintaxis básica de Markdown que se puede usar al escribir contenido en Astro.
 
-## Headings
+## Encabezados
 
-The following HTML `<h1>`—`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level while `<h6>` is the lowest.
+Los siguientes elementos HTML `<h1>`—`<h6>` representan seis niveles de encabezados de sección. `<h1>` es el nivel más alto mientras que `<h6>` es el más bajo.
 
 # H1
 
@@ -23,192 +23,193 @@ The following HTML `<h1>`—`<h6>` elements represent six levels of section head
 
 ###### H6
 
-## Paragraph
+## Párrafo
 
 Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.
 
 Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.
 
-## Images
+## Imágenes
 
-### Syntax
+### Sintaxis
 
 ```markdown
-![Alt text](./full/or/relative/path/of/image)
+![Texto alternativo](./ruta/completa/o/relativa/de/la/imagen)
 ```
 
-### Output
+### Salida
 
 ![blog placeholder](/blog-placeholder-about.jpg)
 
-## Blockquotes
+## Citas en bloque
 
-The blockquote element represents content that is quoted from another source, optionally with a citation which must be within a `footer` or `cite` element, and optionally with in-line changes such as annotations and abbreviations.
+El elemento blockquote representa contenido citado de otra fuente, opcionalmente con una cita que debe estar dentro de un elemento `footer` o `cite`, y opcionalmente con cambios en línea como anotaciones y abreviaturas.
 
-### Blockquote without attribution
+### Cita sin atribución
 
-#### Syntax
+#### Sintaxis
 
 ```markdown
 > Tiam, ad mint andaepu dandae nostion secatur sequo quae.  
-> **Note** that you can use _Markdown syntax_ within a blockquote.
+> **Nota** que puedes usar _sintaxis Markdown_ dentro de una cita.
 ```
 
-#### Output
+#### Salida
 
 > Tiam, ad mint andaepu dandae nostion secatur sequo quae.  
-> **Note** that you can use _Markdown syntax_ within a blockquote.
+> **Nota** que puedes usar _sintaxis Markdown_ dentro de una cita.
 
-### Blockquote with attribution
+### Cita con atribución
 
-#### Syntax
+#### Sintaxis
 
 ```markdown
-> Don't communicate by sharing memory, share memory by communicating.<br>
+> No te comuniques compartiendo memoria, comparte memoria comunicándote.<br>
 > — <cite>Rob Pike[^1]</cite>
 ```
 
-#### Output
+#### Salida
 
-> Don't communicate by sharing memory, share memory by communicating.<br>
+> No te comuniques compartiendo memoria, comparte memoria comunicándote.<br>
 > — <cite>Rob Pike[^1]</cite>
 
-[^1]: The above quote is excerpted from Rob Pike's [talk](https://www.youtube.com/watch?v=PAAkCSZUG1c) during Gopherfest, November 18, 2015.
+[^1]: La cita anterior es un extracto de la [charla](https://www.youtube.com/watch?v=PAAkCSZUG1c) de Rob Pike durante Gopherfest, 18 de noviembre de 2015.
 
-## Tables
+## Tablas
 
-### Syntax
+### Sintaxis
 
 ```markdown
-| Italics   | Bold     | Code   |
-| --------- | -------- | ------ |
-| _italics_ | **bold** | `code` |
+| Cursiva   | Negrita  | Código  |
+| --------- | -------- | ------- |
+| _cursiva_ | **negrita** | `código` |
 ```
 
-### Output
+### Salida
 
-| Italics   | Bold     | Code   |
-| --------- | -------- | ------ |
-| _italics_ | **bold** | `code` |
+| Cursiva   | Negrita  | Código  |
+| --------- | -------- | ------- |
+| _cursiva_ | **negrita** | `código` |
 
-## Code Blocks
+## Bloques de código
 
-### Syntax
+### Sintaxis
 
-we can use 3 backticks ``` in new line and write snippet and close with 3 backticks on new line and to highlight language specific syntax, write one word of language name after first 3 backticks, for eg. html, javascript, css, markdown, typescript, txt, bash
+Podemos usar 3 acentos graves ``` en una nueva línea, escribir el fragmento y cerrar con 3 acentos graves en una nueva línea. Para resaltar la sintaxis específica de un lenguaje, escribe el nombre del lenguaje después de los primeros 3 acentos graves, por ejemplo, html, javascript, css, markdown, typescript, txt, bash.
 
 ````markdown
 ```html
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Example HTML5 Document</title>
+    <title>Documento HTML5 de ejemplo</title>
   </head>
   <body>
-    <p>Test</p>
+    <p>Prueba</p>
   </body>
 </html>
 ```
 ````
 
-### Output
+### Salida
 
 ```html
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Example HTML5 Document</title>
+    <title>Documento HTML5 de ejemplo</title>
   </head>
   <body>
-    <p>Test</p>
+    <p>Prueba</p>
   </body>
 </html>
 ```
 
-## List Types
+## Tipos de listas
 
-### Ordered List
+### Lista ordenada
 
-#### Syntax
+#### Sintaxis
 
 ```markdown
-1. First item
-2. Second item
-3. Third item
+1. Primer elemento
+2. Segundo elemento
+3. Tercer elemento
 ```
 
-#### Output
+#### Salida
 
-1. First item
-2. Second item
-3. Third item
+1. Primer elemento
+2. Segundo elemento
+3. Tercer elemento
 
-### Unordered List
+### Lista desordenada
 
-#### Syntax
+#### Sintaxis
 
 ```markdown
-- List item
-- Another item
-- And another item
+- Elemento de lista
+- Otro elemento
+- Y otro más
 ```
 
-#### Output
+#### Salida
 
-- List item
-- Another item
-- And another item
+- Elemento de lista
+- Otro elemento
+- Y otro más
 
-### Nested list
+### Lista anidada
 
-#### Syntax
+#### Sintaxis
 
 ```markdown
-- Fruit
-  - Apple
-  - Orange
-  - Banana
-- Dairy
-  - Milk
-  - Cheese
+- Frutas
+  - Manzana
+  - Naranja
+  - Plátano
+- Lácteos
+  - Leche
+  - Queso
 ```
 
-#### Output
+#### Salida
 
-- Fruit
-  - Apple
-  - Orange
-  - Banana
-- Dairy
-  - Milk
-  - Cheese
+- Frutas
+  - Manzana
+  - Naranja
+  - Plátano
+- Lácteos
+  - Leche
+  - Queso
 
-## Other Elements — abbr, sub, sup, kbd, mark
+## Otros elementos — abbr, sub, sup, kbd, mark
 
-### Syntax
+### Sintaxis
 
 ```markdown
-<abbr title="Graphics Interchange Format">GIF</abbr> is a bitmap image format.
+<abbr title="Formato de Intercambio de Gráficos">GIF</abbr> es un formato de imagen de mapa de bits.
 
 H<sub>2</sub>O
 
 X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
 
-Press <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>Delete</kbd> to end the session.
+Presiona <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>Supr</kbd> para finalizar la sesión.
 
-Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
+La mayoría de los <mark>salamandras</mark> son nocturnas y cazan insectos, gusanos y otras pequeñas criaturas.
 ```
 
-### Output
+### Salida
 
-<abbr title="Graphics Interchange Format">GIF</abbr> is a bitmap image format.
+<abbr title="Formato de Intercambio de Gráficos">GIF</abbr> es un formato de imagen de mapa de bits.
 
 H<sub>2</sub>O
 
 X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
 
-Press <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>Delete</kbd> to end the session.
+Presiona <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>Supr</kbd> para finalizar la sesión.
 
-Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
+La mayoría de los <mark>salamandras</mark> son nocturnas y cazan insectos, gusanos y otras pequeñas criaturas.
+
