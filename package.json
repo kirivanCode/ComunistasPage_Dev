@@ -14,6 +14,7 @@
     "@astrojs/sitemap": "^3.3.1",
     "@tailwindcss/vite": "^4.1.5",
     "astro": "^5.7.10",
+    "comunistas_informaticos": "file:",
     "tailwindcss": "^4.1.5"
   }
 }
