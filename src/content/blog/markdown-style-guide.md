@@ -1,5 +1,5 @@
 ---
-title: 'Principal líder supremo del movimiento'
+title: 'Ivan Sierra'
 description: 'Ivan Sierra, el principal y único gobernante de los Comunistas Informáticos'
 pubDate: 'Jun 19 2024'
 heroImage: '/ivan.jpg'

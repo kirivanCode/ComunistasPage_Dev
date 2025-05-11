@@ -1,11 +1,12 @@
 ---
-// src/pages/publicar.astro
 import { db } from '../firebase/firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
+
+const user = await Astro.locals.currentUser() // Clerk ya debe haberlo inyectado en server-side
 let success = false;
 
 if (Astro.request.method === 'POST') {
@@ -14,12 +15,13 @@ if (Astro.request.method === 'POST') {
   const content = formData.get('content');
   const image = formData.get('image');
 
-  if (title && content && image) {
+  if (title && content) {
     await addDoc(collection(db, 'news'), {
       title,
       content,
       image,
-      date: serverTimestamp(),
+      autor: user?.fullName || 'Anónimo',
+      createdAt: serverTimestamp(),
     });
     success = true;
   }
@@ -56,6 +58,16 @@ if (Astro.request.method === 'POST') {
         <div>
           <label class="block font-semibold mb-1" for="image">URL de la imagen (opcional)</label>
           <input name="image" id="image" class="w-full border rounded p-2" />
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Autor</label>
+          <input
+            type="text"
+            value={user?.fullName || 'Anónimo'}
+            readonly
+            class="w-full border rounded p-2 bg-gray-100 text-gray-600"
+          />
         </div>
 
         <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">

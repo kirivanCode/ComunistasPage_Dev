@@ -1,5 +1,4 @@
 ---
-// Astro Frontmatter
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -7,7 +6,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 const posts = await Astro.glob('../content/noticias/*.md');
 const sortedPosts = posts.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
 import { getNews } from '../firebase/getNews';
-const firebaseNews = await getNews() as Array<{ id: string; title: string; content: string; image: string }>;
+const firebaseNews = await getNews() as Array<{ id: string; title: string; content: string; image: string; autor?: string }>;
 ---
 
 <!doctype html>
@@ -15,10 +14,11 @@ const firebaseNews = await getNews() as Array<{ id: string; title: string; conte
   <head>
     <BaseHead title="Comunistas Informáticos UTS" description="Blog y portafolio del grupo Comunistas Informáticos de la UTS" />
   </head>
-  <body class="bg-gradient-to-b from-gray-100 to-white text-gray-900 font-sans">
+  <body class="bg-gray-50 text-gray-900 font-sans">
     <Header />
 
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
       <!-- Carrusel -->
       <div class="relative overflow-hidden rounded-2xl shadow-xl mb-16 group">
         <div class="carousel-images flex transition-transform duration-700 ease-in-out" style="transform: translateX(0);">
@@ -26,45 +26,55 @@ const firebaseNews = await getNews() as Array<{ id: string; title: string; conte
           <img src="https://www.portafolio.co/files/article_new_multimedia/files/crop/uploads/2025/05/05/6819783961b77.r_1746533364566.0-192-1024-754.jpeg" alt="Imagen 2" class="w-full object-cover flex-shrink-0 transition-transform duration-500 hover:scale-105" />
           <img src="https://cloudfront-us-east-1.images.arcpublishing.com/elespectador/R5KR3PICCFEVHMFIXPW2H2ETQ4.jpg" alt="Imagen 3" class="w-full object-cover flex-shrink-0 transition-transform duration-500 hover:scale-105" />
         </div>
-        <!-- Botones -->
-        <button class="prev absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800/70 hover:bg-gray-900 text-white p-3 rounded-full shadow-lg transition duration-300 opacity-0 group-hover:opacity-100">❮</button>
-        <button class="next absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800/70 hover:bg-gray-900 text-white p-3 rounded-full shadow-lg transition duration-300 opacity-0 group-hover:opacity-100">❯</button>
+        <button class="prev absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full shadow transition-opacity duration-300 opacity-0 group-hover:opacity-100">❮</button>
+        <button class="next absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full shadow transition-opacity duration-300 opacity-0 group-hover:opacity-100">❯</button>
       </div>
 
       <!-- Noticias -->
       <section class="mb-20">
-        <h2 class="text-3xl font-bold text-center mb-10 text-uts-blue">Últimas Noticias</h2>
-        <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <h2 class="text-4xl font-extrabold text-center mb-12 text-uts-blue">Últimas Noticias</h2>
+        <div class="grid md:grid-cols-2 gap-10">
           {firebaseNews.map(news => (
-            <div class="bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl transition p-6 flex flex-col">
-              <img src={news.image} alt={news.title} class="rounded-lg mb-4 object-cover h-48 w-full" />
-              <h3 class="text-xl font-semibold text-gray-800 mb-2">{news.title}</h3>
-              <p class="text-gray-600 text-sm line-clamp-4">{news.content}</p>
-            </div>
+            <article class="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+              <img src={news.image} alt={news.title} class="w-full h-64 object-cover" />
+              <div class="p-6 flex flex-col gap-4">
+                <div class="flex items-center gap-3 text-sm text-gray-500">
+                  <img src="/calidad1.png" class="w-8 h-8 rounded-full" alt="Logo" />
+                  <span class="font-semibold text-gray-700">Comunistas Informáticos</span>
+                  
+                  <span class="text-xs">• {news.autor || 'Anónimo'}</span>
+                  
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900">{news.title}</h3>
+                <p class="text-gray-700 text-sm line-clamp-4 whitespace-pre-wrap">{news.content}</p>
+                <div class="flex justify-between text-gray-500 text-sm pt-2 border-t">
+                  <button class="hover:text-blue-600 flex items-center gap-1">👍 Me gusta</button>
+                  <button class="hover:text-blue-600 flex items-center gap-1">💬 Comentar</button>
+                  <button class="hover:text-blue-600 flex items-center gap-1">🔁 Compartir</button>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       </section>
 
       <!-- Introducción -->
       <section>
+        <h2 class="text-3xl font-bold text-center mb-8">¿Quiénes somos?</h2>
         <p class="mb-6 text-justify text-lg">
-          Este es el blog oficial del grupo <strong class="font-bold text-red-600">Comunistas Informáticos UTS</strong>, un espacio donde compartimos conocimientos, proyectos y reflexiones sobre software libre, educación tecnológica y desarrollo web.
+          Bienvenidos al blog oficial del grupo <strong class="text-red-600">Comunistas Informáticos UTS</strong>. Aquí compartimos ideas, proyectos, y reflexiones sobre tecnología libre, programación y educación digital.
         </p>
-
         <p class="mb-6 text-justify text-lg">
-          Si eres un estudiante de la <strong class="font-bold text-uts-blue">Universidad Tecnológica de Santander</strong> y te interesa la informática, el software libre y la programación, ¡este es tu lugar!
+          Si eres parte de la <strong class="text-uts-blue">Universidad Tecnológica de Santander</strong> y te apasiona el software libre y la informática, ¡este es tu espacio!
         </p>
-
         <div class="my-10">
-          <img src="https://media.tenor.com/X1_F13WBLHsAAAAM/coelho-comunista.gif" alt="Gif de un gato comunista" class="rounded-2xl mx-auto max-w-md shadow-lg" />
+          <img src="https://media.tenor.com/X1_F13WBLHsAAAAM/coelho-comunista.gif" alt="Gato comunista" class="rounded-2xl mx-auto max-w-md shadow-lg" />
         </div>
-
         <p class="mb-6 text-justify text-lg">
-          En este blog encontrarás tutoriales, artículos y recursos relacionados con el desarrollo web, la programación y el software libre. También compartiremos noticias sobre nuestros proyectos y actividades.
+          Aquí encontrarás tutoriales, artículos técnicos y noticias de nuestras actividades. Valoramos el trabajo colaborativo, la ética en la programación y la libertad digital.
         </p>
-
         <p class="mb-6 text-justify text-lg">
-          Si quieres unirte a nosotros, no dudes en contactarnos. Estamos abiertos a colaboraciones y contribuciones de todos los interesados.	
+          ¿Te interesa colaborar? ¡Contáctanos y únete a la revolución digital!
         </p>
       </section>
     </main>
@@ -74,34 +84,38 @@ const firebaseNews = await getNews() as Array<{ id: string; title: string; conte
 </html>
 
 <script>
-  const carousel = document.querySelector('.carousel-images') as HTMLElement;
+  const carousel = document.querySelector('.carousel-images');
   const images = document.querySelectorAll('.carousel-images img');
   let index = 0;
 
-  function showNextImage() {
-    if (carousel) {
-      index = (index + 1) % images.length;
-      const offset = -index * 100;
+  function showImage(i: number) {
+    if (carousel instanceof HTMLElement) {
+      const offset = -i * 100;
       carousel.style.transform = `translateX(${offset}%)`;
     }
   }
 
-  document.querySelector('.next')?.addEventListener('click', showNextImage);
-  document.querySelector('.prev')?.addEventListener('click', () => {
-    if (carousel) {
-      index = (index - 1 + images.length) % images.length;
-      const offset = -index * 100;
-      carousel.style.transform = `translateX(${offset}%)`;
-    }
-  });
+  function showNext() {
+    index = (index + 1) % images.length;
+    showImage(index);
+  }
 
-  setInterval(showNextImage, 5000);
+  function showPrev() {
+    index = (index - 1 + images.length) % images.length;
+    showImage(index);
+  }
+
+  document.querySelector('.next')?.addEventListener('click', showNext);
+  document.querySelector('.prev')?.addEventListener('click', showPrev);
+
+  setInterval(showNext, 5000);
 </script>
 
 <style>
   .text-uts-blue {
     color: #00539C;
   }
+
   .line-clamp-4 {
     display: -webkit-box;
     -webkit-line-clamp: 4;
