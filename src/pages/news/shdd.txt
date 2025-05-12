@@ -1,0 +1,399 @@
+---
+import { getNews } from '../../firebase/getNews';
+import { getComments } from '../../firebase/getComments';
+import { getLikes } from '../../firebase/getLikes';
+const { params, locals } = Astro;
+const user = await locals.currentUser();
+const avatar = await locals.getAvatar(user?.id);
+const newsId = params.id;
+
+const allNews = await getNews();
+const currentNews: { id: string; title: string; content: string; autor: string; image: string } | undefined = allNews.find(n => n.id === newsId);
+
+const comments: { id: string; usuario: string; mensaje: string }[] = await getComments(newsId);
+const likes = await getLikes(newsId);
+const likeCount = Array.isArray(likes) ? likes.length : 0;
+
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<html lang="es" class="scroll-smooth" >
+  <head>
+    <BaseHead title={currentNews?.title ?? 'Sin título'} description={currentNews?.content?.slice(0, 150) ?? 'Sin descripción'} />
+
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+      /* Reset */
+      * {
+        box-sizing: border-box;
+      }
+      body, html {
+        margin: 0; padding: 0; min-height: 100%;
+        font-family: 'Inter', sans-serif;
+        background: #fafafa;
+        color: #262626;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      #root {
+        margin: 0 auto;
+        background: white;
+        border: 1px solid #dbdbdb;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        max-width: 600px;
+        width: 100%;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      /* Instagram style fixed header */
+      header {
+        position: sticky;
+        top: 0;
+        background: white;
+        border-bottom: 1px solid #dbdbdb;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        font-weight: 600;
+        font-size: 1.25rem;
+        z-index: 20;
+      }
+      header .logo {
+        font-family: 'Segoe Script', cursive, monospace;
+        font-size: 1.7rem;
+        color: #262626;
+        letter-spacing: 1.5px;
+        user-select: none;
+      }
+      header .icon-button {
+        font-size: 1.4rem;
+        cursor: pointer;
+        color: #262626;
+        padding: 6px;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+      }
+      header .icon-button:hover {
+        background-color: #efefef;
+      }
+
+      main {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding-top: 8px; /* small padding below header */
+      }
+      main article.post {
+        margin: 0;
+        background: white;
+        border: none;
+        box-shadow: none;
+      }
+      .post-header {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        gap: 12px;
+      }
+      .post-header .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #ccc;
+        flex-shrink: 0;
+      }
+      .post-header .username {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #262626;
+      }
+      .post-image {
+        width: 100%;
+        display: block;
+        object-fit: cover;
+        max-height: 500px;
+        border-top: 1px solid #dbdbdb;
+        border-bottom: 1px solid #dbdbdb;
+      }
+      .post-content {
+        padding: 12px 16px;
+        font-size: 1rem;
+        color: #262626;
+        white-space: pre-wrap;
+      }
+      .post-actions {
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .action-button {
+        cursor: pointer;
+        border: none;
+        background: transparent;
+        color: #262626;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        transition: color 0.3s ease;
+      }
+      .action-button.liked {
+        color: #ed4956;
+      }
+      .action-button:hover {
+        color: #ed4956;
+      }
+      .likes-count {
+        padding: 0 16px 8px 16px;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+      section.comments {
+        padding: 0 16px 12px 16px;
+        max-height: 190px;
+        overflow-y: auto;
+      }
+      .comment {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .comment .avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #ccc;
+        flex-shrink: 0;
+      }
+      .comment .content {
+        background: #f0f0f0;
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        color: #262626;
+        max-width: 270px;
+        word-wrap: break-word;
+      }
+      .comment .username {
+        font-weight: 600;
+        margin-right: 6px;
+      }
+      form#comment-form {
+        display: flex;
+        gap: 8px;
+        padding: 8px 16px 16px 16px;
+        border-top: 1px solid #dbdbdb;
+        background: white;
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        max-width: 100%;
+      }
+      form#comment-form textarea {
+        flex-grow: 1;
+        resize: none;
+        padding: 8px 12px;
+        border-radius: 20px;
+        border: 1px solid #dbdbdb;
+        font-size: 0.9rem;
+        font-family: 'Inter', sans-serif;
+        height: 36px;
+        line-height: 1.2;
+        min-height: 36px;
+      }
+      form#comment-form button {
+        background: none;
+        border: none;
+        color: #3897f0;
+        font-size: 1.8rem;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        transition: color 0.25s ease;
+      }
+      form#comment-form button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      /* Scrollbar style */
+      #root::-webkit-scrollbar,
+      section.comments::-webkit-scrollbar {
+        width: 6px;
+      }
+      #root::-webkit-scrollbar-thumb,
+      section.comments::-webkit-scrollbar-thumb {
+        background-color: rgba(0,0,0,0.1);
+        border-radius: 3px;
+      }
+
+      /* Responsive Typography and Layout */
+      @media (max-width: 600px) {
+        #root {
+          border: none;
+          height: 100vh;
+          max-width: 100%;
+        }
+        .post-image {
+          max-height: none;
+        }
+        .comment .content {
+          max-width: calc(100% - 40px);
+        }
+        form#comment-form {
+          padding: 8px 12px 16px 12px;
+        }
+      }
+      @media (min-width: 768px) {
+        #root {
+          max-width: 600px;
+          height: 100vh;
+        }
+        header {
+          font-size: 1.75rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root" aria-label="Instagram style post">
+      <header>
+        <div class="icon-button" role="button" aria-label="Open menu" tabindex="0">
+          <i class="fa-solid fa-bars"></i>
+        </div>
+        <div class="logo" aria-label="Instagram logo">Instagram</div>
+        <div class="icon-button" role="button" aria-label="Direct messages" tabindex="0">
+          <i class="fa-regular fa-paper-plane"></i>
+        </div>
+      </header>
+
+      <main>
+        <article class="post" aria-label="Post content">
+          <div class="post-header">
+            <div class="avatar" aria-hidden="true"></div>
+            <div class="username">{currentNews?.autor ?? 'Anónimo'}</div>
+          </div>
+
+          <img class="post-image" src={currentNews?.image} alt={currentNews?.title ?? 'Imagen del post'} />
+
+          <section class="post-content" aria-label="Post textual content">
+            <strong>{currentNews?.title}</strong><br />
+            <span>{currentNews?.content}</span>
+          </section>
+
+          <section class="post-actions" aria-label="Post actions">
+            <button id="like-button" class="action-button" aria-pressed="false" aria-label="Like button" type="button">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+            <span id="like-count" aria-live="polite" aria-atomic="true" class="likes-count">{likeCount} {likeCount === 1 ? 'like' : 'likes'}</span>
+          </section>
+        </article>
+
+        <section class="comments" aria-label="Comments section">
+          {comments.map(comment => (
+            <div key={comment.id} class="comment" aria-label={`Comment by ${comment.usuario}`}>
+              <div class="avatar" aria-hidden="true"></div>
+              <div class="content"><span class="username">{comment.usuario}</span>{comment.mensaje}</div>
+            </div>
+          ))}
+        </section>
+
+        <form id="comment-form" aria-label="Add comment form">
+          <input type="hidden" name="newsId" value={newsId} />
+          <input type="hidden" name="usuario" value={user.fullName} />
+          <textarea name="mensaje" placeholder="Añadir un comentario..." rows="1" required aria-required="true" aria-label="Escribe un comentario"></textarea>
+          <button type="submit" aria-label="Enviar comentario" disabled>
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </main>
+    </div>
+
+    <Footer />
+
+    <script type="module">
+      const commentForm = document.getElementById('comment-form');
+      const likeButton = document.getElementById('like-button');
+      const likeCountSpan = document.getElementById('like-count');
+      let liked = false;
+
+      // Initialize like button based on whether user liked this post
+      (async () => {
+        const response = await fetch('/api/hasLiked', {
+          method: 'POST',
+          body: JSON.stringify({ newsId: '${newsId}', userId: '${user.id}' }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        liked = data.liked;
+        updateLikeButton();
+      })();
+
+      function updateLikeButton() {
+        if (liked) {
+          likeButton.classList.add('liked');
+          likeButton.setAttribute('aria-pressed', 'true');
+          likeButton.querySelector('i').classList.remove('fa-regular');
+          likeButton.querySelector('i').classList.add('fa-solid');
+        } else {
+          likeButton.classList.remove('liked');
+          likeButton.setAttribute('aria-pressed', 'false');
+          likeButton.querySelector('i').classList.remove('fa-solid');
+          likeButton.querySelector('i').classList.add('fa-regular');
+        }
+      }
+
+      likeButton.addEventListener('click', async () => {
+        const response = await fetch('/api/toggleLike', {
+          method: 'POST',
+          body: JSON.stringify({
+            newsId: '${newsId}',
+            userId: '${user.id}'
+          }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        liked = result.liked;
+        let currentCount = parseInt(likeCountSpan.textContent) || 0;
+        likeCountSpan.textContent = currentCount + (liked ? 1 : -1);
+        updateLikeButton();
+      });
+
+      const textarea = commentForm.querySelector('textarea');
+      const submitBtn = commentForm.querySelector('button');
+
+      textarea.addEventListener('input', () => {
+        submitBtn.disabled = textarea.value.trim().length === 0;
+      });
+
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+
+        const formData = new FormData(commentForm);
+        await fetch('/api/addComment', {
+          method: 'POST',
+          body: JSON.stringify({
+            newsId: formData.get('newsId'),
+            usuario: formData.get('usuario'),
+            mensaje: formData.get('mensaje')
+          }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        location.reload();
+      });
+    </script>
+  </body>
+</html>

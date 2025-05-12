@@ -1,0 +1,112 @@
+---
+import { getNews } from '../../firebase/getNews';
+import { getComments } from '../../firebase/getComments';
+import { getLikes } from '../../firebase/getLikes';
+import Layout from '../../layouts/BlogPost.astro';
+const { params, locals } = Astro;
+const user = await locals.currentUser();
+const newsId = params.id;
+
+const allNews = await getNews();
+const currentNews = allNews.find(n => n.id === newsId) as { id: string; title: string; content: string; autor: string; image: string } | undefined;
+
+const comments = (await getComments(newsId)) as { id: string; usuario: string; mensaje: string }[];
+const likes = await getLikes(newsId);
+const likeCount = Array.isArray(likes) ? likes.length : 0;
+
+
+
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+
+---
+
+<html lang="es" class="scroll-smooth">
+  <head>
+    <BaseHead title={currentNews?.title ?? 'Sin título'} description={currentNews?.content?.slice(0, 150) ?? 'Sin descripción'} />
+    
+  </head>
+  <body class="bg-gray-50 text-gray-900 font-sans">
+    <Header />
+
+    <main class="max-w-3xl mx-auto px-4 py-12">
+      <article class="bg-white p-6 rounded-xl shadow-md mb-10">
+        <h1 class="text-3xl font-bold mb-4">{currentNews?.title}</h1>
+        <img src={currentNews?.image} alt={currentNews?.title} class="w-full h-auto rounded-lg mb-4" />
+        <p class="text-lg leading-relaxed mb-4">{currentNews?.content}</p>
+        <p class="text-sm text-gray-600"><strong>Autor:</strong> {currentNews?.autor ?? 'Anónimo'}</p>
+      </article>
+
+      <!-- Likes y comentarios aquí -->
+
+    <section class="max-w-3xl mx-auto mt-8 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-2">👍 Likes: <span id="like-count" class="text-blue-600">{likeCount}</span></h2>
+      <form id="like-form" class="flex items-center gap-4">
+        <input type="hidden" name="newsId" value={newsId} />
+        <input type="hidden" name="userId" value={user.id} />
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Dar/Quitar Like</button>
+      </form>
+    </section>
+
+    <section class="max-w-3xl mx-auto mt-8 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">🗨️ Comentarios</h2>
+      <form id="comment-form" class="mb-4 space-y-4">
+        <input type="hidden" name="newsId" value={newsId} />
+        <input type="hidden" name="usuario" value={user.fullName} />
+        <textarea name="mensaje" class="w-full border border-gray-300 rounded p-2" placeholder="Escribe un comentario..." required></textarea>
+        <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">Enviar</button>
+      </form>
+
+      <ul id="comments" class="space-y-2">
+        {comments.map(comment => (
+          <li class="border-b pb-2"><strong>{comment.usuario}</strong>: {comment.mensaje}</li>
+        ))}
+      </ul>
+    </section>
+
+    <script type="module">
+      const commentForm = document.getElementById('comment-form');
+      const likeForm = document.getElementById('like-form');
+
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(commentForm);
+        await fetch('/api/addComment', {
+          method: 'POST',
+          body: JSON.stringify({
+            newsId: formData.get('newsId'),
+            usuario: formData.get('usuario'),
+            mensaje: formData.get('mensaje')
+          }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        location.reload();
+      });
+
+      likeForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(likeForm);
+        const response = await fetch('/api/toggleLike', {
+          method: 'POST',
+          body: JSON.stringify({
+            newsId: formData.get('newsId'),
+            userId: formData.get('userId')
+          }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const result = await response.json();
+        const liked = result.liked;
+        const countElement = document.getElementById('like-count');
+        const currentCount = parseInt(countElement.textContent);
+        countElement.textContent = currentCount + (liked ? 1 : -1);
+      });
+    </script>
+  </body>
+</html>
+
+
+</head>
+
+ <Footer />

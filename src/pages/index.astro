@@ -1,12 +1,14 @@
 ---
+// filepath: c:\Users\Ivan\Desktop\semestre 7\proyecto\comunistas\comunistas_informaticos\src\pages\index.astro
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-const posts = await Astro.glob('../content/noticias/*.md');
-const sortedPosts = posts.sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime());
 import { getNews } from '../firebase/getNews';
+
 const firebaseNews = await getNews() as Array<{ id: string; title: string; content: string; image: string; autor?: string }>;
+const user = await Astro.locals.currentUser();
+const currentUserName = (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : 'Anónimo';
+const currentUserId = user?.id ?? null;
 ---
 
 <!doctype html>
@@ -19,49 +21,42 @@ const firebaseNews = await getNews() as Array<{ id: string; title: string; conte
 
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
+      <!-- Noticias -->
+      <section class="mb-20">
+        
+        {firebaseNews.length === 0 ? (
+          <p class="text-center text-gray-500">No hay noticias disponibles.</p>
+        ) : (
+          <ul class="grid md:grid-cols-2 gap-10">
+            {firebaseNews.map(news => (
+              <li class="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
+                <a href={`/news/${news.id}`} class="block">
+                  <h3 class="text-xl font-semibold text-gray-900 p-4">{news.title}</h3>
+                  {news.image && (
+                    <img src={news.image} alt={news.title} class="w-full h-64 object-cover" />
+                  )}
+                </a>
+                <div class="p-4">
+                  <p class="text-gray-700 text-sm">{news.content.slice(0, 120)}...</p>
+                  <small class="text-gray-500">Por: {news.autor || 'Anónimo'}</small>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
       <!-- Carrusel -->
       <div class="relative overflow-hidden rounded-2xl shadow-xl mb-16 group">
         <div class="carousel-images flex transition-transform duration-700 ease-in-out" style="transform: translateX(0);">
           <img src="https://www.indiewire.com/wp-content/uploads/2023/07/oppenheimer-cillian.webp" alt="Imagen 1" class="w-full object-cover flex-shrink-0 transition-transform duration-500 hover:scale-105" />
-          <img src="https://www.portafolio.co/files/article_new_multimedia/files/crop/uploads/2025/05/05/6819783961b77.r_1746533364566.0-192-1024-754.jpeg" alt="Imagen 2" class="w-full object-cover flex-shrink-0 transition-transform duration-500 hover:scale-105" />
+          <img src="https://imagenes.elpais.com/resizer/v2/WSNIO64JNSGQ7UF4WPKAIOXJ7U.jpg?auth=62593337512f9dc8c49143e13f3695ff93122b644a4ade46230d058f0cd008cd&width=1960&height=1470&smart=true" alt="Imagen 2" class="w-full object-cover flex-shrink-0 transition-transform duration-500 hover:scale-105" />
           <img src="https://cloudfront-us-east-1.images.arcpublishing.com/elespectador/R5KR3PICCFEVHMFIXPW2H2ETQ4.jpg" alt="Imagen 3" class="w-full object-cover flex-shrink-0 transition-transform duration-500 hover:scale-105" />
         </div>
         <button class="prev absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full shadow transition-opacity duration-300 opacity-0 group-hover:opacity-100">❮</button>
         <button class="next absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full shadow transition-opacity duration-300 opacity-0 group-hover:opacity-100">❯</button>
       </div>
 
-      <!-- Noticias -->
-      <section class="mb-20">
-        <h2 class="text-4xl font-extrabold text-center mb-12 text-uts-blue">Últimas Noticias</h2>
-        <div class="grid md:grid-cols-2 gap-10">
-          {firebaseNews.map(news => (
-            <article class="bg-white border border-gray-200 rounded-2xl shadow hover:shadow-lg transition overflow-hidden">
-              <img src={news.image} alt={news.title} class="w-full h-64 object-cover" />
-              <div class="p-6 flex flex-col gap-4">
-                <div class="flex items-center gap-3 text-sm text-gray-500">
-                  <img src="/calidad1.png" class="w-8 h-8 rounded-full" alt="Logo" />
-                  <span class="font-semibold text-gray-700">Comunistas Informáticos</span>
-                  
-                  <span class="text-xs">• {news.autor || 'Anónimo'}</span>
-                  
-                </div>
-                <h3 class="text-xl font-semibold text-gray-900">{news.title}</h3>
-                <div class="text-gray-700 text-sm whitespace-pre-wrap transition-all duration-300 max-h-32 overflow-hidden expandible" id={`news-${news.id}`}>
-  {news.content}
-</div>
-<button class="text-blue-600 text-sm font-semibold hover:underline mt-2 leer-mas-btn" data-target={`news-${news.id}`}>Leer más</button>
-
-
-                <div class="flex justify-between text-gray-500 text-sm pt-2 border-t">
-                  <button class="hover:text-blue-600 flex items-center gap-1">👍 Me gusta</button>
-                  <button class="hover:text-blue-600 flex items-center gap-1">💬 Comentar</button>
-                  <button class="hover:text-blue-600 flex items-center gap-1">🔁 Compartir</button>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
 
       <!-- Introducción -->
       <section>
@@ -133,16 +128,3 @@ const firebaseNews = await getNews() as Array<{ id: string; title: string; conte
   max-height: 8rem; /* = 32 (tailwind max-h-32) */
 }
 </style>
-
-<script>
-  function toggleExpand(id, btn) {
-    const el = document.getElementById(id);
-    if (!el) return;
-
-    const isExpanded = el.classList.toggle('max-h-full');
-    el.classList.toggle('max-h-32');
-    btn.textContent = isExpanded ? 'Leer menos' : 'Leer más';
-  }
-</script>
-
-
