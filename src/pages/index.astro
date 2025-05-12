@@ -46,7 +46,12 @@ const firebaseNews = await getNews() as Array<{ id: string; title: string; conte
                   
                 </div>
                 <h3 class="text-xl font-semibold text-gray-900">{news.title}</h3>
-                <p class="text-gray-700 text-sm line-clamp-4 whitespace-pre-wrap">{news.content}</p>
+                <div class="text-gray-700 text-sm whitespace-pre-wrap transition-all duration-300 max-h-32 overflow-hidden expandible" id={`news-${news.id}`}>
+  {news.content}
+</div>
+<button class="text-blue-600 text-sm font-semibold hover:underline mt-2 leer-mas-btn" data-target={`news-${news.id}`}>Leer más</button>
+
+
                 <div class="flex justify-between text-gray-500 text-sm pt-2 border-t">
                   <button class="hover:text-blue-600 flex items-center gap-1">👍 Me gusta</button>
                   <button class="hover:text-blue-600 flex items-center gap-1">💬 Comentar</button>
@@ -122,4 +127,22 @@ const firebaseNews = await getNews() as Array<{ id: string; title: string; conte
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  .expandible {
+  overflow: hidden;
+  max-height: 8rem; /* = 32 (tailwind max-h-32) */
+}
 </style>
+
+<script>
+  function toggleExpand(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    const isExpanded = el.classList.toggle('max-h-full');
+    el.classList.toggle('max-h-32');
+    btn.textContent = isExpanded ? 'Leer menos' : 'Leer más';
+  }
+</script>
+
+

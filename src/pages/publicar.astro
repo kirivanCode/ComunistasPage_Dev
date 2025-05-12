@@ -5,8 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-
-const user = await Astro.locals.currentUser() // Clerk ya debe haberlo inyectado en server-side
+const user = await Astro.locals.currentUser();
 let success = false;
 
 if (Astro.request.method === 'POST') {
@@ -32,48 +31,54 @@ if (Astro.request.method === 'POST') {
   <head>
     <BaseHead title="Publicar noticia" description="Página para publicar noticias en el sitio web" />
   </head>
-  <body class="bg-gray-50 text-gray-800">
+  <body class="min-h-screen bg-gradient-to-br from-blue-50 to-white dark:from-[#1a1a1a] dark:to-[#0f0f0f] text-gray-900 dark:text-gray-100 flex flex-col">
     <Header />
 
-    <main class="max-w-3xl mx-auto px-4 py-16">
-      <h1 class="text-3xl font-bold mb-6">📝 Publicar noticia</h1>
+    <main class="flex-grow flex flex-col justify-center items-center w-full px-4 py-8 sm:py-12">
+      <section class="w-full max-w-5xl bg-white dark:bg-[#1E1E22] shadow-2xl rounded-2xl p-8 sm:p-12 border border-gray-200 dark:border-gray-700 transition-all duration-300">
+        <h1 class="text-4xl sm:text-5xl font-extrabold mb-10 text-center text-blue-700 dark:text-blue-400">
+          📝 Publicar Noticia
+        </h1>
 
-      {success ? (
-        <div class="bg-green-100 text-green-800 p-4 rounded mb-6">
-          ✅ ¡Noticia publicada exitosamente!
-        </div>
-      ) : null}
+        {success ? (
+          <div class="bg-green-100 text-green-900 border border-green-300 dark:bg-green-900 dark:text-green-100 dark:border-green-500 p-4 rounded-md shadow mb-8 text-center">
+            ✅ <strong>¡Noticia publicada exitosamente!</strong>
+          </div>
+        ) : null}
 
-      <form method="POST" class="space-y-6">
-        <div>
-          <label class="block font-semibold mb-1" for="title">Título</label>
-          <input name="title" id="title" required class="w-full border rounded p-2" />
-        </div>
+        <form method="POST" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="col-span-full">
+            <label for="title" class="block font-semibold mb-2">Título</label>
+            <input name="title" id="title" required placeholder="Título de la noticia"
+              class="w-full border dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500" />
+          </div>
 
-        <div>
-          <label class="block font-semibold mb-1" for="content">Contenido</label>
-          <textarea name="content" id="content" required class="w-full border rounded p-2 h-32"></textarea>
-        </div>
+          <div class="col-span-full">
+            <label for="content" class="block font-semibold mb-2">Contenido</label>
+            <textarea name="content" id="content" required placeholder="Contenido completo..."
+              class="w-full border dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-800 dark:text-white h-48 resize-none focus:ring-2 focus:ring-blue-500"></textarea>
+          </div>
 
-        <div>
-          <label class="block font-semibold mb-1" for="image">URL de la imagen (opcional)</label>
-          <input name="image" id="image" class="w-full border rounded p-2" />
-        </div>
+          <div class="sm:col-span-1">
+            <label for="image" class="block font-semibold mb-2">URL de la imagen (opcional)</label>
+            <input name="image" id="image" placeholder="https://..."
+              class="w-full border dark:border-gray-600 rounded-lg p-3 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500" />
+          </div>
 
-        <div>
-          <label class="block font-semibold mb-1">Autor</label>
-          <input
-            type="text"
-            value={user?.fullName || 'Anónimo'}
-            readonly
-            class="w-full border rounded p-2 bg-gray-100 text-gray-600"
-          />
-        </div>
+          <div class="sm:col-span-1">
+            <label class="block font-semibold mb-2">Autor</label>
+            <input type="text" readonly value={user?.fullName || 'Anónimo'}
+              class="w-full border dark:border-gray-600 rounded-lg p-3 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 cursor-not-allowed" />
+          </div>
 
-        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-          Publicar
-        </button>
-      </form>
+          <div class="col-span-full flex justify-end">
+            <button type="submit"
+              class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 transition text-white font-semibold px-6 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+              🚀 Publicar Noticia
+            </button>
+          </div>
+        </form>
+      </section>
     </main>
 
     <Footer />
