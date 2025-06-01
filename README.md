@@ -10,16 +10,21 @@ npm create astro@latest -- --template blog
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
 
-Features:
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+Pagina de comunistas informaticos de la Uts:
+
+- ✅ recuerda iniciar sesion para que funcione
+  ![image](https://github.com/user-attachments/assets/cb655fcf-c2dd-4b39-a59c-fcda04a9bb69)
+- ✅ se tu mismo
+  ![image](https://github.com/user-attachments/assets/559372bf-b782-4069-93e7-e1938d2099f7)
+- ✅ miembros
+  ![image](https://github.com/user-attachments/assets/ab316997-6fde-4883-880d-1a00ad681ff5)
+
+- ✅ kirivan sopport and admin
+- ✅ publica tu noticia
+  ![image](https://github.com/user-attachments/assets/16f69efc-70de-48d0-ac3a-9515c58d45ca)
+
 
 ## 🚀 Project Structure
 
