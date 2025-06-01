@@ -1,8 +1,9 @@
-# Astro Starter Kit: Blog
+# Astro: Blog de comunistas de la uts
 
 ```sh
-npm create astro@latest -- --template blog
+npm create astro@latest -- 
 ```
+esto es para crear un projecto de astro, este se uso firebase y clerk
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
 [![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
